@@ -136,15 +136,21 @@ def execute_command(command):
 
 	return True
 
-def rar_release(path_to_file, rar_dest):
+def rar_release(path_to_files, rar_dest):
 	"""
+	Rars up the provided files to the given folder.
+	
+	path_to_files: A list of full paths to files
+	rar_dest: The destination path + base name for the rar set
+	
+	Returns: True for success or False for failure
 	"""
 
-	log("Creating rars for "+path_to_file+" at "+rar_dest)
+	log("Creating rars for "+str(path_to_files)+" at "+rar_dest)
 	rar_dir = os.path.dirname(rar_dest)
 	if not os.path.isdir(rar_dir):
 		os.makedirs(rar_dir)
-	cmd = "rar a %s %s %s -v15m -m0" % (rar_dest, path_to_file, replace_extension(path_to_file, 'nfo'))
+	cmd = "rar a %s %s -v15m -m0" % (rar_dest, ' '.join(path_to_files))
 	
 	return execute_command(cmd)
 
@@ -208,9 +214,10 @@ def main():
 	nfo_file_path = replace_extension(scene_file_path, 'nfo')
 	create_nfo(nfo_file_path, FILE)
 
-	# rar it
+	# rar the avi and nfo
 	rar_base_name = os.path.join(TEMP_DIR, scene_base_name, scene_base_name)
-	if not rar_release(scene_file_path, rar_base_name):
+	files_to_rar = [scene_file_path, replace_extension(scene_file_path, 'nfo')]
+	if not rar_release(files_to_rar, rar_base_name):
 		return
 
 	# par it
