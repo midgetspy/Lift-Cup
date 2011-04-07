@@ -218,8 +218,8 @@ def main():
 		return
 
 	# upload it
-	#if not upload_release(os.path.dirname(rar_base_name)):
-	#	return
+	if not upload_release(os.path.dirname(rar_base_name)):
+		return
 
 	# remove the leftover files
 	log("Cleaning up leftover files")
