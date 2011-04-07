@@ -1,0 +1,54 @@
+What is Lift Cup?
+==================
+Lift Cup is a python script that automatically uploads video files to usenet for you. The most common use case is to use it as an rtorrent post-processing script so you can automatically upload torrent downloads to usenet (if you managed to download a poorly-seeded or rare torrent, for example, this way you can share it simply with others).
+
+
+What exactly does it do?
+============================
+1) Renames the file with a more standardized name and recognizable source/quality indication
+2) Creates a small NFO file saying where it came from
+3) Rars the video + NFO
+4) Creates pars from the rars
+5) Uploads the pars & rars to usenet
+
+
+How does the quality stuff work?
+=========================
+Lift Cup always adds a quality string to the filename so that automated tools will be able to recognize it. It finds a quality in this order:
+
+1) The quality string already in the filename, if it exists
+2) The quality passed in to lift_cup.py
+3) A guess based on the file extension
+
+
+How to install
+====================
+
+1) Get the source
+git clone git://github.com/midgetspy/Lift-Cup.git ~/lift_cup
+
+2) Install dependencies:
+* rar
+* par2
+* newsmangler (git clone git://github.com/madcowfred/newsmangler.git ~/newsmangler)
+
+3) Set up rtorrent
+
+Add the following to your .rtorrent.rc:
+
+# Watch dirs
+# Note: every watch dir must have d.set_custom5=<something>, where <something> is either a Lift Cup quality, blank, or SKIP.
+schedule = watch_directory_1,10,10,"load_start=/home/midgetspy/watch_dir/*.torrent,d.set_custom5=SKIP" # this won't have Lift Cup executed on it
+schedule = watch_directory_2,10,10,"load_start=/home/midgetspy/watch_dir/hd_bluray_watch_dir/*.torrent,d.set_custom5=HDBLURAY" # unless the filename says otherwise files in this folder will be assumed to be 720p BluRay
+
+# execute lift cup after each download
+system.method.set_key = event.download.finished,lift_cup,"execute=/home/midgetspy/lift_cup.py,$d.get_base_path=,$d.get_custom5="
+
+Note that if you have existing watch dirs set up you'll need to add ,d.set_custom5=SKIP to the end of them. Also if you use custom5 for a different purpose you'll need to adjust the Lift Cup lines accordingly.
+
+You can also use it manually:
+
+./lift_cup.py <filename> [quality]
+
+filename: the full path to the file you want to process
+quality: a quality name to use if the quality doesn't already exist in the file
