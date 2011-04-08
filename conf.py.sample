@@ -1,0 +1,13 @@
+##################### config options #########################
+
+# newsmangler paths
+POSTER_PY = '/home/midgetspy/newsmangler/poster.py'
+POSTER_CONF = '/home/midgetspy/newsmangler/.newsmangler.conf'
+
+# folder to use for temporary storage of rars/etc while we're uploading
+TEMP_DIR = 'uploads'
+
+# custom string to insert into NFO file ("" for none)
+nfo_string = ""
+
+#############################################################
