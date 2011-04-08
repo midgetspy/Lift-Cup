@@ -273,5 +273,5 @@ def main():
         shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))
 
     
-
-main()
+if __name__ == 'main':
+    main()
