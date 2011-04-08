@@ -97,25 +97,30 @@ class LiftCup(object):
     
         return os.path.splitext(filename)[0]+'.'+newext
     
-    def execute_command(self, command):
+    def execute_command(self, command, cwd=None):
         """
         Executes the given shell command and returns bool representing success.
     
         command: A string containing the command (with parameters) to execute
+        cwd: Optional parameter that gets passed to Popen as the cwd
     
         Returns: True for success, False for failure.
         """
     
-        # kludge for shlex.split
-        if os.sep == '\\':
-            command = command.replace(os.sep, os.sep+os.sep)
-    
-        script_cmd = shlex.split(command)
+        # if we have a string turn it into a command list 
+        if type(command) in (str, unicode):
+            # kludge for shlex.split
+            if os.sep == '\\':
+                command = command.replace(os.sep, os.sep+os.sep)
+            script_cmd = shlex.split(command)
+        else:
+            script_cmd = command
+
         self.logger("Executing command "+str(script_cmd), debug=True)
     
         try:
             if not self.test:
-                p = subprocess.Popen(script_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                p = subprocess.Popen(script_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd)
                 out, err = p.communicate()
             else:
                 out = err = ''
@@ -140,13 +145,17 @@ class LiftCup(object):
         Returns: True for success or False for failure
         """
     
-        self.logger("Creating rars for "+str(path_to_files)+" at "+rar_dest)
+        common_root_path = os.path.dirname(os.path.commonprefix(path_to_files))
+        short_file_list = [x[len(common_root_path)+1:] for x in path_to_files]
+        rar_dest = os.path.abspath(rar_dest)
+    
+        self.logger("Creating rars for "+str(short_file_list)+" at "+rar_dest)
         rar_dir = os.path.dirname(rar_dest)
         if not os.path.isdir(rar_dir):
             os.makedirs(rar_dir)
-        cmd = "rar a %s %s -v15m -m0" % (rar_dest, ' '.join(path_to_files))
+        cmd = ['rar', 'a', rar_dest, ' '.join(short_file_list), '-v15m', '-m0']
         
-        return self.execute_command(cmd)
+        return self.execute_command(cmd, common_root_path)
     
     def par_release(self, path_to_rars):
         """
@@ -158,7 +167,7 @@ class LiftCup(object):
         """
         self.logger("Creating pars for rars at "+path_to_rars+"*.rar")
     
-        cmd = "par2create -r10 -n7 %s %s %s" % (path_to_rars, path_to_rars+'*.rar', path_to_rars+'.nfo')
+        cmd = ['par2create', '-r10', '-n7', path_to_rars, path_to_rars+'*.rar', path_to_rars+'.nfo']
     
         return self.execute_command(cmd)
     
@@ -171,7 +180,7 @@ class LiftCup(object):
         Returns: True for success or False for failure
         """
         self.logger("Uploading the files in", release_path)
-        cmd = POSTER_PY + ' -c '+ POSTER_CONF + ' ' + release_path + os.sep
+        cmd = [POSTER_PY, '-c', POSTER_CONF, release_path + os.sep]
     
         return self.execute_command(cmd)
     

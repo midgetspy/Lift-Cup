@@ -6,10 +6,10 @@ Lift Cup is a python script that automatically uploads video files to usenet for
 What exactly does it do?
 ============================
 1) Renames the file with a more standardized name and recognizable source/quality indication
-2) Creates a small NFO file saying where it came from
-3) Rars the video + NFO
+2) Rars the video
+3) Creates a small NFO file saying where it came from
 4) Creates pars from the rars
-5) Uploads the pars & rars to usenet
+5) Uploads the rars, rars, and NFO to usenet
 
 
 How does the quality stuff work?
@@ -20,6 +20,7 @@ Lift Cup always adds a quality string to the filename so that automated tools wi
 2) The quality passed in to lift_cup.py
 3) A guess based on the file extension
 
+Qualities are: SDTV, SDDVD, HDTV, WEBDL, HDBLURAY, FULLHDBLURAY
 
 How to install
 ====================
@@ -43,7 +44,7 @@ Usage
 
 Post-processing with rtorrent
 
-Add the following to your .rtorrent.rc:
+Because of how rtorrent works there's no way to run Lift Cup on only selected torrents. To get around this, you must set d.set_custom5=SKIP on any watch dirs that you do not want Lift Cup to run on.
 
 # Watch dirs
 # Note: every watch dir must have d.set_custom5=<something>, where <something> is either a Lift Cup quality, blank, or SKIP.
@@ -53,7 +54,8 @@ schedule = watch_directory_2,10,10,"load_start=/home/midgetspy/watch_dir/hd_blur
 # execute lift cup after each download
 system.method.set_key = event.download.finished,lift_cup,"execute=/home/midgetspy/rtorrent_lc.py,$d.get_base_path=,$d.get_custom5="
 
-Note that if you have existing watch dirs set up you'll need to add ,d.set_custom5=SKIP to the end of them. Also if you use custom5 for a different purpose you'll need to adjust the Lift Cup lines accordingly.
+Note: ALL watch dirs must have d.set_custom5= in them or they will error! You will need to update your existing watch dirs!
+
 
 
 Call it manually
