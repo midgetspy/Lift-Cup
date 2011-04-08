@@ -32,7 +32,16 @@ git clone git://github.com/midgetspy/Lift-Cup.git ~/lift_cup
 * par2
 * newsmangler (git clone git://github.com/madcowfred/newsmangler.git ~/newsmangler)
 
-3) Set up rtorrent
+3) Set up config
+
+* rename conf.py.sample to conf.py
+* configure the options inside to match your system
+
+
+Usage
+===================
+
+Post-processing with rtorrent
 
 Add the following to your .rtorrent.rc:
 
@@ -42,13 +51,13 @@ schedule = watch_directory_1,10,10,"load_start=/home/midgetspy/watch_dir/*.torre
 schedule = watch_directory_2,10,10,"load_start=/home/midgetspy/watch_dir/hd_bluray_watch_dir/*.torrent,d.set_custom5=HDBLURAY" # unless the filename says otherwise files in this folder will be assumed to be 720p BluRay
 
 # execute lift cup after each download
-system.method.set_key = event.download.finished,lift_cup,"execute=/home/midgetspy/lift_cup.py,$d.get_base_path=,$d.get_custom5="
+system.method.set_key = event.download.finished,lift_cup,"execute=/home/midgetspy/rtorrent_lc.py,$d.get_base_path=,$d.get_custom5="
 
 Note that if you have existing watch dirs set up you'll need to add ,d.set_custom5=SKIP to the end of them. Also if you use custom5 for a different purpose you'll need to adjust the Lift Cup lines accordingly.
 
-You can also use it manually:
 
-./lift_cup.py <filename> [quality]
+Call it manually
 
-filename: the full path to the file you want to process
-quality: a quality name to use if the quality doesn't already exist in the file
+./lc.py <file1> [file2] ... [fileN]
+
+Run just ./lc.py with no options to see all other options.
