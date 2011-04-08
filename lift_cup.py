@@ -240,7 +240,7 @@ class LiftCup(object):
         # rar the avi and nfo
         scene_base_name = os.path.splitext(scene_file_name)[0]
         rar_base_name = os.path.join(TEMP_DIR, scene_base_name, scene_base_name)
-        files_to_rar = [scene_file_path, self.replace_extension(scene_file_path, 'nfo')]
+        files_to_rar = [scene_file_path]
         if not self.rar_release(files_to_rar, rar_base_name):
             return
 
