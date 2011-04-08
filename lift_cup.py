@@ -159,7 +159,7 @@ class LiftCup(object):
         """
         self.logger("Creating pars for rars at "+path_to_rars+"*.rar")
     
-        cmd = "par2create -r10 -n7 %s %s" % (path_to_rars, path_to_rars+'*.rar')
+        cmd = "par2create -r10 -n7 %s %s %s" % (path_to_rars, path_to_rars+'*.rar', path_to_rars+'.nfo')
     
         return self.execute_command(cmd)
     
@@ -238,16 +238,16 @@ class LiftCup(object):
             os.makedirs(TEMP_DIR)
         shutil.copyfile(cur_file, scene_file_path)
     
-        # make an nfo
-        scene_base_name = os.path.splitext(scene_file_name)[0]
-        nfo_file_path = self.replace_extension(scene_file_path, 'nfo')
-        self.create_nfo(nfo_file_path, self.file)
-    
         # rar the avi and nfo
+        scene_base_name = os.path.splitext(scene_file_name)[0]
         rar_base_name = os.path.join(TEMP_DIR, scene_base_name, scene_base_name)
         files_to_rar = [scene_file_path, self.replace_extension(scene_file_path, 'nfo')]
         if not self.rar_release(files_to_rar, rar_base_name):
             return
+
+        # make an nfo
+        nfo_file_path = rar_base_name + '.nfo'
+        self.create_nfo(nfo_file_path, self.file)
     
         # par it
         if not self.par_release(rar_base_name):
