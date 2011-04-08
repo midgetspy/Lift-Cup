@@ -123,8 +123,7 @@ class LiftCup(object):
             self.logger("Error:", e)
             return False
     
-        if self.debug:
-            self.logger(out, debug=True)
+        self.logger(out, debug=True)
     
         if err:
             self.logger(err)
