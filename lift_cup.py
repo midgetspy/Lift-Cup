@@ -172,7 +172,7 @@ class LiftCup(object):
         Returns: True for success or False for failure
         """
         self.logger("Uploading the files in", release_path)
-        cmd = POSTER_PY + ' -c '+ POSTER_CONF + ' ' + release_path
+        cmd = POSTER_PY + ' -c '+ POSTER_CONF + ' ' + release_path + os.sep
     
         return self.execute_command(cmd)
     
