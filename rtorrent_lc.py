@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # Author: Nic Wolfe <nic@wolfeden.ca>
 # URL: http://github.com/midgetspy/Lift-Cup
