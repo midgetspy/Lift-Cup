@@ -269,7 +269,8 @@ def main():
     log("Cleaning up leftover files")
     os.remove(scene_file_path)
     os.remove(nfo_file_path)
-    shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))
+    if os.path.isdir(os.path.join(TEMP_DIR, scene_base_name)):
+        shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))
 
     
 
