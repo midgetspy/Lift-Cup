@@ -139,6 +139,25 @@ class LiftCup(object):
     
         return True
     
+    def find_rar_size(self, file_list):
+        """
+        Picks the size of rars to use for a given release (options are 15, 20, 50, or 100MB). Aims for about
+        30 files in the release.
+        
+        Returns: the number of megabytes the rars should be 
+        """
+        rar_sizes = (15, 20, 50, 100)
+        
+        # get the size in megs
+        size = sum([os.path.getsize(x) for x in file_list]) / 1024 / 1024
+        
+        # find the best rar size, aim for about 30 files
+        ideal_size = size / 30
+        
+        rar_size = min((abs(ideal_size - x), x) for x in rar_sizes)[1]
+        
+        return rar_size
+
     def rar_release(self, path_to_files, rar_dest):
         """
         Rars up the provided files to the given folder.
@@ -149,6 +168,8 @@ class LiftCup(object):
         Returns: True for success or False for failure
         """
     
+        rar_size = self.find_rar_size(path_to_files)
+    
         common_root_path = os.path.dirname(os.path.commonprefix(path_to_files))
         short_file_list = [x[len(common_root_path)+1:] for x in path_to_files]
         rar_dest = os.path.abspath(rar_dest)
@@ -157,7 +178,7 @@ class LiftCup(object):
         rar_dir = os.path.dirname(rar_dest)
         if not os.path.isdir(rar_dir):
             os.makedirs(rar_dir)
-        cmd = ['rar', 'a', rar_dest, ' '.join(short_file_list), '-v15m', '-m0']
+        cmd = ['rar', 'a', rar_dest, ' '.join(short_file_list), '-v'+str(rar_size)+'m', '-m0']
         
         return self.execute_command(cmd, common_root_path)
     
