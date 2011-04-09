@@ -44,7 +44,7 @@ scene_qualities = {Quality.SDTV: "HDTV.XviD",
 
 class LiftCup(object):
 
-    def __init__(self, full_file_path, quality=None, log=True, test=False, debug=False):
+    def __init__(self, full_file_path, quality=None, log=True, test=False, debug=False, cleanup=True, upload=True):
 
         self.tv_dir = os.path.dirname(full_file_path)
         self.file = os.path.basename(full_file_path)
@@ -52,6 +52,8 @@ class LiftCup(object):
         self.log = log
         self.test = test
         self.debug = debug
+        self.cleanup = cleanup
+        self.upload = upload
         
         # primitive logging
         if self.log:
@@ -262,12 +264,14 @@ class LiftCup(object):
             return
     
         # upload it
-        if not self.upload_release(os.path.dirname(rar_base_name)):
+        if self.upload and not self.upload_release(os.path.dirname(rar_base_name)):
             return
     
         # remove the leftover files
         self.logger("Cleaning up leftover files")
-        os.remove(scene_file_path)
-        os.remove(nfo_file_path)
-        if os.path.isdir(os.path.join(TEMP_DIR, scene_base_name)):
-            shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))
+        
+        if self.cleanup:
+            os.remove(scene_file_path)
+            os.remove(nfo_file_path)
+            if os.path.isdir(os.path.join(TEMP_DIR, scene_base_name)):
+                shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))

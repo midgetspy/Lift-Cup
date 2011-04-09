@@ -31,15 +31,17 @@ def usage():
     print "Usage:", sys.argv[0], "<file path> [quality]"
     print "Options:"
     print " --debug: prints debug info to console instead of just the log"
-    print " --nolog: doesn't create a log file"
     print " --test: don't actually execute the commands, just fake it"
+    print " --nolog: doesn't create a log file"
+    print " --nocleanup: don't delete files after finishing"
+    print " --noupload: don't upload files anymore"
     sys.exit(1)
 
 if __name__ == '__main__':
 
     # parse out the options from the command line, GNU style
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtnq::", ['debug', 'test', 'nolog', 'quality='])
+        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'quality='])
     except getopt.GetoptError:
         usage()
     
@@ -52,19 +54,25 @@ if __name__ == '__main__':
     DEBUG = False
     TEST = False
     NOLOG = False
+    NOCLEANUP = False
+    NOUPLOAD = False
     DEFAULT_QUALITY = None
     
     for opt, val in opts:
         if opt in ('--debug', '-d'):
             DEBUG = True
-        if opt in ('--nolog', '-n'):
+        if opt in ('--nolog'):
             NOLOG = True
         if opt in ('--test', '-t'):
             TEST = True
+        if opt in ('--nocleanup'):
+            NOCLEANUP = True
+        if opt in ('--noupload'):
+            NOUPLOAD = True
         if opt in ('--quality', '-q'):
             DEFAULT_QUALITY = val
     
     for cur_file_path in file_path_list:
         print "Calling Lift Cup for file", cur_file_path 
-        lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG)
+        lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD)
         lc.lift_cup()
