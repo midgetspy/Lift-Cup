@@ -34,7 +34,7 @@ def usage():
     print " --test: don't actually execute the commands, just fake it"
     print " --nolog: doesn't create a log file"
     print " --nocleanup: don't delete files after finishing"
-    print " --noupload: don't upload files anymore"
+    print " --noupload: don't upload files"
     sys.exit(1)
 
 if __name__ == '__main__':
