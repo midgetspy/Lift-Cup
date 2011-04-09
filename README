@@ -14,11 +14,11 @@ What exactly does it do?
 
 How does the quality stuff work?
 =========================
-Lift Cup always adds a quality string to the filename so that automated tools will be able to recognize it. It finds a quality in this order:
+Lift Cup always adds a quality string to the filename so that automated tools will be able to recognize it. It finds a quality by:
 
-1) The quality string already in the filename, if it exists
-2) The quality passed in to lift_cup.py
-3) A guess based on the file extension
+1) Attempting to use the quality string already in the filename
+2) If not in the name, it uses the quality passed in by the user
+3) If no quality passed in then it guesses based on the file extension
 
 Qualities are: SDTV, SDDVD, HDTV, WEBDL, HDBLURAY, FULLHDBLURAY
 
