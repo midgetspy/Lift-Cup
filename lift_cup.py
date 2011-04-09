@@ -57,7 +57,7 @@ class LiftCup(object):
         
         # primitive logging
         if self.log:
-            self.log_file = open(os.path.join(LOG_DIR, 'lc_log.'+self.file+'.txt', 'w'))
+            self.log_file = open(os.path.join(LOG_DIR, 'lc_log.'+self.file+'.txt'), 'w')
 
         # if we don't have a valid quality from the config then try to convert the string
         if quality and quality not in Quality.qualityStrings:
