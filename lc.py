@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # parse out the options from the command line, GNU style
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'nocleanup', 'quality='])
+        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'noupload', 'quality='])
     except getopt.GetoptError:
         usage()
     
