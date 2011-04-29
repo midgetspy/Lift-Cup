@@ -9,7 +9,7 @@ What exactly does it do?
 2) Rars the video
 3) Creates a small NFO file saying where it came from
 4) Creates pars from the rars
-5) Uploads the rars, rars, and NFO to usenet
+5) Uploads the rars, pars, and NFO to usenet
 
 
 How does the quality stuff work?
@@ -63,3 +63,13 @@ Call it manually
 ./lc.py <file1> [file2] ... [fileN]
 
 Run just ./lc.py with no options to see all other options.
+
+
+Newsmangler Config
+====================
+
+In order to get your files detected on the automatic indexing sites you should use the [Lift-Cup] prefix and post to alt.binaries.multimedia.
+
+So your resulting posts should look something like:
+
+[LiftCup] Cookery.School.s01e43.andyx.tbz.HDTV.XviD [35/35] - "Cookery.School.s01e43.andyx.tbz.HDTV.XviD.vol126+74.par2" yEnc
