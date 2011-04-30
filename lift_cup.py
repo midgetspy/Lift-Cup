@@ -23,6 +23,7 @@ import subprocess
 import shlex
 import shutil
 import sys
+import datetime
 
 from quality import Quality
 
@@ -83,7 +84,7 @@ class LiftCup(object):
 
 
     def logger(self, *args, **kwargs):
-        message = ' '.join([str(x) for x in args])
+        message = str(datetime.datetime.today()) + ' ' + ' '.join([str(x) for x in args])
         if ('debug' not in kwargs or not kwargs['debug']):
             print message
         elif self.debug:
