@@ -23,6 +23,7 @@ import subprocess
 import shlex
 import shutil
 import sys
+import datetime
 
 from quality import Quality
 
@@ -59,7 +60,11 @@ class LiftCup(object):
         # primitive logging
         if self.log:
             if not os.path.isdir(LOG_DIR):
-                os.makedirs(LOG_DIR)
+                try:
+                    os.makedirs(LOG_DIR)
+                except OSError:
+                    print "Error:", "No permissions to create ", LOG_DIR
+                    sys.exit(1)
             self.log_file = open(os.path.join(LOG_DIR, 'lc_log.'+self.file+'.txt'), 'w')
 
         # if we don't have a valid quality from the config then try to convert the string
@@ -80,7 +85,7 @@ class LiftCup(object):
 
 
     def logger(self, *args, **kwargs):
-        message = ' '.join([str(x) for x in args])
+        message = str(datetime.datetime.today()) + ' ' + ' '.join([str(x) for x in args])
         if ('debug' not in kwargs or not kwargs['debug']):
             print message
         elif self.debug:
