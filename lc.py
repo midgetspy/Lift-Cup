@@ -35,13 +35,14 @@ def usage():
     print " --nolog: doesn't create a log file"
     print " --nocleanup: don't delete files after finishing"
     print " --noupload: don't upload files"
+    print " --skipquality: don't try to insert quality into the name"
     sys.exit(1)
 
 if __name__ == '__main__':
 
     # parse out the options from the command line, GNU style
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'quality='])
+        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'quality=', 'skipquality'])
     except getopt.GetoptError:
         usage()
     
@@ -57,6 +58,7 @@ if __name__ == '__main__':
     NOCLEANUP = False
     NOUPLOAD = False
     DEFAULT_QUALITY = None
+    SKIP_QUALITY = False
     
     for opt, val in opts:
         if opt in ('--debug', '-d'):
@@ -71,8 +73,10 @@ if __name__ == '__main__':
             NOUPLOAD = True
         if opt in ('--quality', '-q'):
             DEFAULT_QUALITY = val
+        if opt in ('--skip_quality'):
+            SKIP_QUALITY = val
     
     for cur_file_path in file_path_list:
         print "Calling Lift Cup for file", cur_file_path 
-        lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD)
+        lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD, SKIP_QUALITY)
         lc.lift_cup()

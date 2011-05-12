@@ -44,7 +44,7 @@ scene_qualities = {Quality.SDTV: "HDTV.XviD",
 
 class LiftCup(object):
 
-    def __init__(self, full_file_path, quality=None, log=True, test=False, debug=False, cleanup=True, upload=True):
+    def __init__(self, full_file_path, quality=None, log=True, test=False, debug=False, cleanup=True, upload=True, skip_quality=False):
 
         self.tv_dir = os.path.dirname(full_file_path)
         self.file = os.path.basename(full_file_path)
@@ -54,6 +54,7 @@ class LiftCup(object):
         self.debug = debug
         self.cleanup = cleanup
         self.upload = upload
+        self.skip_quality = skip_quality
         
         # primitive logging
         if self.log:
@@ -217,7 +218,7 @@ class LiftCup(object):
         
         Returns: A string containing the scenified version of the name
         """
-        if Quality.nameQuality(name) != Quality.UNKNOWN:
+        if Quality.nameQuality(name) != Quality.UNKNOWN or self.skip_quality:
             scene_name = name
 
         else:
