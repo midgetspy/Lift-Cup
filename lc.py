@@ -73,8 +73,8 @@ if __name__ == '__main__':
             NOUPLOAD = True
         if opt in ('--quality', '-q'):
             DEFAULT_QUALITY = val
-        if opt in ('--skip_quality'):
-            SKIP_QUALITY = val
+        if opt in ('--skipquality'):
+            SKIP_QUALITY = True
     
     for cur_file_path in file_path_list:
         print "Calling Lift Cup for file", cur_file_path 
