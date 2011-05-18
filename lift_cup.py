@@ -255,7 +255,7 @@ class LiftCup(object):
         old_name: The original name of this release before we scenified it
             """
         self.logger("Creating NFO at", nfo_path)
-        nfo = open(nfo_path, 'w')
+        nfo = open(nfo_path, 'a')
         nfo.write('Original name: '+old_name+'\n')
         if nfo_string:
             nfo.write(nfo_string+'\n')
@@ -284,8 +284,13 @@ class LiftCup(object):
         if not self.rar_release(files_to_rar, rar_base_name):
             return
 
-        # make an nfo
+        # make an nfo if it doesn't exist
+        cur_file_name = os.path.splitext(cur_file)[0]
+        cur_file_nfo = cur_file_name + '.nfo'
         nfo_file_path = rar_base_name + '.nfo'
+        if os.path.isfile(cur_file_nfo):
+            self.logger("Using existing nfo at", cur_file_nfo, "as a base") 
+            shutil.copyfile(cur_file_nfo, nfo_file_path)
         self.create_nfo(nfo_file_path, self.file)
     
         # par it
