@@ -229,6 +229,9 @@ class LiftCup(object):
         else:
             if not self.quality:
                 cur_quality = Quality.assumeQuality(name)
+                if cur_quality == Quality.UNKNOWN:
+                    self.logger("Cannot guess quality from the filename, please use --quality")
+                    sys.exit(1)
             else:
                 cur_quality = self.quality 
             
