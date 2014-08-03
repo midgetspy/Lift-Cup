@@ -22,12 +22,11 @@ import sys
 import os.path
 import getopt
 
-from quality import Quality
-
 from lift_cup import LC_VERSION, LiftCup
 
+
 def usage():
-    print "Lift Cup "+str(LC_VERSION)
+    print "Lift Cup " + str(LC_VERSION)
     print "Usage:", sys.argv[0], "<file path> [quality]"
     print "Options:"
     print " --debug: prints debug info to console instead of just the log"
@@ -45,13 +44,13 @@ if __name__ == '__main__':
         opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'noupload', 'quality=', 'skipquality'])
     except getopt.GetoptError:
         usage()
-    
+
     file_path_list = [os.path.abspath(x) for x in args if os.path.isfile(x)]
-    
+
     if not file_path_list:
         print "No valid files specified."
         usage()
-    
+
     DEBUG = False
     TEST = False
     NOLOG = False
@@ -59,7 +58,7 @@ if __name__ == '__main__':
     NOUPLOAD = False
     DEFAULT_QUALITY = None
     SKIP_QUALITY = False
-    
+
     for opt, val in opts:
         if opt in ('--debug', '-d'):
             DEBUG = True
@@ -75,8 +74,8 @@ if __name__ == '__main__':
             DEFAULT_QUALITY = val
         if opt in ('--skipquality'):
             SKIP_QUALITY = True
-    
+
     for cur_file_path in file_path_list:
-        print "Calling Lift Cup for file", cur_file_path 
+        print "Calling Lift Cup on:", cur_file_path
         lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD, SKIP_QUALITY)
         lc.lift_cup()
