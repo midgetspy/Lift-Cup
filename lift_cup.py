@@ -383,3 +383,5 @@ class LiftCup(object):
             self.logger("Cleaning up leftover files")
             if os.path.isdir(os.path.join(TEMP_DIR, scene_base_name)):
                 shutil.rmtree(os.path.join(TEMP_DIR, scene_base_name))
+
+        self.logger("Done.")
