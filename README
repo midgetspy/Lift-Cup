@@ -1,26 +1,17 @@
+This is a fork of the tool Lift Cup made by midgetspy.
+
 What is Lift Cup?
 ==================
-Lift Cup is a python script that automatically uploads video files to usenet for you. The most common use case is to use it as an rtorrent post-processing script so you can automatically upload torrent downloads to usenet (if you managed to download a poorly-seeded or rare torrent, for example, this way you can share it simply with others).
+Lift Cup is a python script that automatically uploads video files to usenet for you.
 
 
-What exactly does it do?
+What exactly does this modified version do?
 ============================
-1) Renames the file with a more standardized name and recognizable source/quality indication
-2) Rars the video
-3) Creates a small NFO file saying where it came from
-4) Creates pars from the rars
-5) Uploads the rars, pars, and NFO to usenet
+1) Rars the files with a veiled name and set password if needed
+2) Creates pars from the rars
+3) Uploads the rars and pars to the usenet
+4) Exports nzb files with SabNZB compatible names
 
-
-How does the quality stuff work?
-=========================
-Lift Cup always adds a quality string to the filename so that automated tools will be able to recognize it. It finds a quality by:
-
-1) Attempting to use the quality string already in the filename
-2) If not in the name, it uses the quality passed in by the user
-3) If no quality passed in then it guesses based on the file extension
-
-Qualities are: SDTV, SDDVD, HDTV, WEBDL, HDBLURAY, FULLHDBLURAY
 
 How to install
 ====================
@@ -34,17 +25,12 @@ git clone git://github.com/midgetspy/Lift-Cup.git ~/lift_cup
 * newsmangler (git clone git://github.com/madcowfred/newsmangler.git ~/newsmangler)
 
 3) Set up config
-
 * rename conf.py.sample to conf.py
 * configure the options inside to match your system
 
 
 Usage
 ===================
-
-Post-processing with rtorrent
-
-Because of how rtorrent works there's no way to run Lift Cup on only selected torrents. To get around this, you must set d.set_custom5=SKIP on any watch dirs that you do not want Lift Cup to run on.
 
 # Watch dirs
 # Note: every watch dir must have d.set_custom5=<something>, where <something> is either a Lift Cup quality, blank, or SKIP.
