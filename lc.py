@@ -22,11 +22,11 @@ import sys
 import os.path
 import getopt
 
+from lift_cup import VERSION, LiftCup
 
-from lift_cup import LC_VERSION, LiftCup
 
 def usage():
-    print "Lift Cup "+str(LC_VERSION)
+    print "Lift Cup "+str(VERSION)
     print "Usage:", sys.argv[0], "<file path>"
     print "Options:"
     print " --debug: prints debug info to console instead of just the log"
@@ -36,8 +36,8 @@ def usage():
     print " --noupload: don't upload files"
     sys.exit(1)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     # parse out the options from the command line, GNU style
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'noupload'])

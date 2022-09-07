@@ -23,6 +23,7 @@ import os.path
 
 from lift_cup import LiftCup
 
+
 full_file_path = os.path.abspath(sys.argv[1])
 
 if len(sys.argv) >= 3:

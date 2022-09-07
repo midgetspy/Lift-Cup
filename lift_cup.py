@@ -31,13 +31,12 @@ except ImportError:
     print "No config found, check that you have a conf.py file"
     sys.exit(1)
 
-LC_VERSION = 0.1
+VERSION = 0.1
 
 
 class LiftCup(object):
 
     def __init__(self, full_file_path, log=True, test=False, debug=False, cleanup=True, upload=True):
-
         self.tv_dir = os.path.dirname(full_file_path)
         self.file = os.path.basename(full_file_path)
         self.log = log
@@ -70,7 +69,8 @@ class LiftCup(object):
             print message
         if self.log:
             self.log_file.write(message+'\n')
-        
+
+
     def replace_extension(self, filename, newext):
         """
         Replaces the extension of the given filename with a new extension.
@@ -84,7 +84,8 @@ class LiftCup(object):
             return filename
     
         return os.path.splitext(filename)[0]+'.'+newext
-    
+
+
     def execute_command(self, command, cwd=None):
         """
         Executes the given shell command and returns bool representing success.
@@ -122,7 +123,8 @@ class LiftCup(object):
             self.logger(err)
     
         return True
-    
+
+
     def find_rar_size(self, file_list):
         """
         Picks the size of rars to use for a given release (options are 15, 20, 50, or 100MB). Aims for about
@@ -141,6 +143,7 @@ class LiftCup(object):
         rar_size = min((abs(ideal_size - x), x) for x in rar_sizes)[1]
         
         return rar_size
+
 
     def rar_release(self, path_to_files, rar_dest):
         """
@@ -166,6 +169,7 @@ class LiftCup(object):
         
         return self.execute_command(cmd, common_root_path)
     
+
     def par_release(self, path_to_rars):
         """
         Generates pars for a set of rars.
@@ -180,6 +184,7 @@ class LiftCup(object):
     
         return self.execute_command(cmd)
     
+
     def upload_release(self, release_path):
         """
         Uses newsmangler to upload a set of rars/pars to usenet.
@@ -193,6 +198,7 @@ class LiftCup(object):
     
         return self.execute_command(cmd)
     
+
     def create_nfo(self, nfo_path, old_name):
         """
         Generates an NFO file at the given path. Includes the original name of the file for reference.
@@ -207,6 +213,7 @@ class LiftCup(object):
             nfo.write(nfo_string+'\n')
         nfo.write('Lift Cup '+str(LC_VERSION)+'\n')
         nfo.close
+    
     
     def lift_cup(self):
         cur_file = os.path.join(self.tv_dir, self.file)
