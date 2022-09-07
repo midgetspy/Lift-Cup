@@ -22,27 +22,25 @@ import sys
 import os.path
 import getopt
 
-from quality import Quality
 
 from lift_cup import LC_VERSION, LiftCup
 
 def usage():
     print "Lift Cup "+str(LC_VERSION)
-    print "Usage:", sys.argv[0], "<file path> [quality]"
+    print "Usage:", sys.argv[0], "<file path>"
     print "Options:"
     print " --debug: prints debug info to console instead of just the log"
     print " --test: don't actually execute the commands, just fake it"
     print " --nolog: doesn't create a log file"
     print " --nocleanup: don't delete files after finishing"
     print " --noupload: don't upload files"
-    print " --skipquality: don't try to insert quality into the name"
     sys.exit(1)
 
 if __name__ == '__main__':
 
     # parse out the options from the command line, GNU style
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'noupload', 'quality=', 'skipquality'])
+        opts, args = getopt.gnu_getopt(sys.argv[1:], "dtq::", ['debug', 'test', 'nolog', 'nocleanup', 'noupload'])
     except getopt.GetoptError:
         usage()
     
@@ -57,8 +55,6 @@ if __name__ == '__main__':
     NOLOG = False
     NOCLEANUP = False
     NOUPLOAD = False
-    DEFAULT_QUALITY = None
-    SKIP_QUALITY = False
     
     for opt, val in opts:
         if opt in ('--debug', '-d'):
@@ -71,12 +67,8 @@ if __name__ == '__main__':
             NOCLEANUP = True
         if opt in ('--noupload'):
             NOUPLOAD = True
-        if opt in ('--quality', '-q'):
-            DEFAULT_QUALITY = val
-        if opt in ('--skipquality'):
-            SKIP_QUALITY = True
     
     for cur_file_path in file_path_list:
         print "Calling Lift Cup for file", cur_file_path 
-        lc = LiftCup(cur_file_path, DEFAULT_QUALITY, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD, SKIP_QUALITY)
+        lc = LiftCup(cur_file_path, not NOLOG, TEST, DEBUG, not NOCLEANUP, not NOUPLOAD)
         lc.lift_cup()

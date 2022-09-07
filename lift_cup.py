@@ -25,8 +25,6 @@ import shutil
 import sys
 import datetime
 
-from quality import Quality
-
 try:
     from conf import *
 except ImportError:
@@ -35,27 +33,18 @@ except ImportError:
 
 LC_VERSION = 0.1
 
-scene_qualities = {Quality.SDTV: "HDTV.XviD",
-           Quality.SDDVD: "DVDRip.XviD",
-           Quality.HDTV: "720p.HDTV.x264",
-           Quality.HDWEBDL: "720p.WEB-DL",
-           Quality.HDBLURAY: "720p.BluRay.x264",
-           Quality.FULLHDBLURAY: "1080p.BluRay.x264",
-          }
 
 class LiftCup(object):
 
-    def __init__(self, full_file_path, quality=None, log=True, test=False, debug=False, cleanup=True, upload=True, skip_quality=False):
+    def __init__(self, full_file_path, log=True, test=False, debug=False, cleanup=True, upload=True):
 
         self.tv_dir = os.path.dirname(full_file_path)
         self.file = os.path.basename(full_file_path)
-        self.quality = quality
         self.log = log
         self.test = test
         self.debug = debug
         self.cleanup = cleanup
         self.upload = upload
-        self.skip_quality = skip_quality
         
         # primitive logging
         if self.log:
@@ -66,17 +55,6 @@ class LiftCup(object):
                     print "Error:", "No permissions to create ", LOG_DIR
                     sys.exit(1)
             self.log_file = open(os.path.join(LOG_DIR, 'lc_log.'+self.file+'.txt'), 'w')
-
-        # if we don't have a valid quality from the config then try to convert the string
-        if quality and quality not in Quality.qualityStrings:
-            try:
-                self.quality = getattr(Quality, quality)
-            except AttributeError:
-                print "Invalid quality provided, ignoring it:", quality
-                self.quality = None
-
-        if self.quality:
-            self.logger("Default quality provided:", self.quality)
 
         # check that our input was sane
         if not os.path.isfile(full_file_path):
@@ -215,38 +193,6 @@ class LiftCup(object):
     
         return self.execute_command(cmd)
     
-    def make_scene_name(self, name):
-        """
-        Tries to inject the appropriate quality into the name and "scenifies" it a little bit
-        
-        name: The original filename of the release
-        
-        Returns: A string containing the scenified version of the name
-        """
-        if Quality.nameQuality(name) != Quality.UNKNOWN or self.skip_quality:
-            scene_name = name
-
-        else:
-            if not self.quality:
-                cur_quality = Quality.assumeQuality(name)
-            else:
-                cur_quality = self.quality 
-            
-            base_name, extension = os.path.splitext(name)
-    
-            scene_match = re.match('(.*\S)\-(\S+)', base_name)
-    
-            if not scene_match:
-                scene_name = base_name + '.' + scene_qualities[cur_quality] + extension
-            else:
-                scene_name = scene_match.group(1) + '.' + scene_qualities[cur_quality] + '-' + scene_match.group(2) + extension
-        
-        scene_name = re.sub("[_ !()+'.-]+", '.', scene_name)
-    
-        self.logger("Made new scene name:", scene_name)
-    
-        return scene_name
-    
     def create_nfo(self, nfo_path, old_name):
         """
         Generates an NFO file at the given path. Includes the original name of the file for reference.
@@ -264,8 +210,7 @@ class LiftCup(object):
     
     def lift_cup(self):
         cur_file = os.path.join(self.tv_dir, self.file)
-        scene_file_name = self.make_scene_name(self.file)
-        scene_file_path = os.path.join(TEMP_DIR, scene_file_name)
+        scene_file_path = os.path.join(TEMP_DIR, self.file)
     
         if os.path.isfile(scene_file_path):
             self.logger("File", scene_file_path, "already exists, skipping this release")
@@ -278,7 +223,7 @@ class LiftCup(object):
         shutil.copyfile(cur_file, scene_file_path)
     
         # rar the avi and nfo
-        scene_base_name = os.path.splitext(scene_file_name)[0]
+        scene_base_name = os.path.splitext(self.file)[0]
         rar_base_name = os.path.join(TEMP_DIR, scene_base_name, scene_base_name)
         files_to_rar = [scene_file_path]
         if not self.rar_release(files_to_rar, rar_base_name):

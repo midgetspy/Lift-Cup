@@ -21,20 +21,14 @@
 import sys
 import os.path
 
-from quality import Quality
-
 from lift_cup import LiftCup
 
 full_file_path = os.path.abspath(sys.argv[1])
 
-DEFAULT_QUALITY = None
-
-# if there's a quality given to us then use it
 if len(sys.argv) >= 3:
     if sys.argv[2].upper() == 'SKIP':
         print "Skipping", sys.argv[1]
         sys.exit(0)
-    DEFAULT_QUALITY = sys.argv[2].upper()
     
-lc = LiftCup(full_file_path, DEFAULT_QUALITY)
+lc = LiftCup(full_file_path)
 lc.lift_cup()
